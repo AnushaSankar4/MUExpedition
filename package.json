@@ -1,0 +1,28 @@
+{
+  "name": "muexpedition",
+  "version": "4.2.1",
+  "description": "A tresure hunt Alexa skill ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "alexa",
+    "skill",
+    "Old Trafford"
+  ],
+  "author": "AnushaShankar",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "alexa-sdk": "^1.0.6"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnushaShankar/MUExpedition.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AnushaShankar/MUExpedition/issues"
+  },
+  "homepage": "https://github.com/AnushaShankar/MUExpedition#readme"
+}
