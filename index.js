@@ -30,15 +30,14 @@ var info = require("./facts");
 var facts = {
 	"trophyroom": info["trophydata"],
 	"stadium": info["stadiumdata"],
-	"artgallery": info["dressingroomdata"],
-	"jerseyroom": info["playersloungedata"],
+	"jerseyroom": info["dressingroomdata"],
+	"playerslounge": info["playersloungedata"],
 	"manchester": info["manchester"]
 };
 
 exports.handler = function(event, context, callback) {
     var alexa = Alexa.handler(event, context);
     alexa.APP_ID = APP_ID;
-	//alexa.dynamoDBTableName="MUFacts";
     alexa.registerHandlers(newSessionHandlers, startStateHandlers, triviaStateHandlers, clueStateHandlers , branchStateHandlers );
     alexa.execute();
 };
@@ -76,8 +75,8 @@ var startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
 		else if(room.value.toLowerCase()=="stadium"){
 			factArr = facts.stadium;
 		}
-		else if(room.value.toLowerCase()=="art gallery"){
-			factArr = facts.artgallery;
+		else if(room.value.toLowerCase()=="players lounge"){
+			factArr = facts.playerslounge;
 		}
 		else if(room.value.toLowerCase()=="jersey room"){
 			factArr = facts.jerseyroom;
@@ -90,7 +89,8 @@ var startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
         var speechOutput = GET_FACT_MESSAGE + randomFact;
 		speechOutput+="Do you want to learn more?";
 		Object.assign(this.attributes, {
-			"oldtraffroom": room.value		
+			"oldtraffroom": room.value,
+			"speechOutput":speechOutput
 			
         });
 		this.handler.state = GAME_STATES.BRANCH;
@@ -114,7 +114,6 @@ var startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
 
 var branchStateHandlers = Alexa.CreateStateHandler(GAME_STATES.BRANCH, {	
 	"AMAZON.YesIntent": function() {
-		//var room= this.attributes.oldtraffroom;
 		moreRoomInfo.call(this,false);
     },
 	"AMAZON.NoIntent": function() {
@@ -126,8 +125,6 @@ var branchStateHandlers = Alexa.CreateStateHandler(GAME_STATES.BRANCH, {
 	"StateIntent": function() {
 		var state = this.event.request.intent.slots.gamestate;
 		if(state.value.toLowerCase()=="trivia"){
-			//this.emit(':tell',"trivia selected");
-			// this.emit("TriviaIntent");
 			this.handler.state = GAME_STATES.TRIVIA;
 			this.emitWithState("TriviaIntent", false);
 		}
@@ -142,7 +139,7 @@ var branchStateHandlers = Alexa.CreateStateHandler(GAME_STATES.BRANCH, {
         this.emitWithState("StartGame", false);
     },
     "AMAZON.RepeatIntent": function () {
-        this.emit(":ask", this.attributes["speechOutput"], this.attributes["repromptText"]);
+        this.emit(":ask", this.attributes.speechOutput, "Do you want to learn more?");
     },
     "AMAZON.HelpIntent": function () {
         var speechOutput = HELP_MESSAGE;
@@ -169,31 +166,7 @@ var branchStateHandlers = Alexa.CreateStateHandler(GAME_STATES.BRANCH, {
 var triviaStateHandlers = Alexa.CreateStateHandler(GAME_STATES.TRIVIA, {
 	
 	
-	/*"AMAZON.YesIntent": function() {
-		//var room= this.attributes["room"];
-        this.handler.state = GAME_STATES.TRIVIA;
-        this.emitWithState("TriviaIntent");
-		//this.emit(':tell',"You are in "+ room);
-    },
-	"AMAZON.NoIntent": function() {
-        this.emit(":ask", "Would you like to play trivia or would you like a clue to the next spot?","Trivia or Clue?");
-		this.emit("StateIntent");
-		
-    },
 	
-	"StateIntent": function() {
-		var state = this.event.request.intent.slots.gamestate;
-		if(state.value.toLowerCase()=="trivia"){
-			//this.emit(':tell',"trivia selected");
-			// this.emit("TriviaIntent");
-			this.handler.state = GAME_STATES.START;
-			this.emitWithState("StartGame", false);
-		}
-		else if(state.value.toLowerCase()=="clue"){
-			 this.emit("ClueIntent");
-		}
-		else{}
-	},*/
 	"TriviaIntent": function() {
 		this.emit(':tell',"trivia selected");
 	},
@@ -201,9 +174,6 @@ var triviaStateHandlers = Alexa.CreateStateHandler(GAME_STATES.TRIVIA, {
         this.handler.state = GAME_STATES.START;
         this.emitWithState("StartGame", false);
     },
-    /*"AMAZON.RepeatIntent": function () {
-        this.emit(":ask", this.attributes["speechOutput"], this.attributes["repromptText"]);
-    },*/
     "AMAZON.HelpIntent": function () {
         var speechOutput = HELP_MESSAGE;
         var reprompt = HELP_REPROMPT;
@@ -229,31 +199,6 @@ var triviaStateHandlers = Alexa.CreateStateHandler(GAME_STATES.TRIVIA, {
 var clueStateHandlers = Alexa.CreateStateHandler(GAME_STATES.CLUE, {
 	
 	
-	/*"AMAZON.YesIntent": function() {
-		//var room= this.attributes["room"];
-        this.handler.state = GAME_STATES.TRIVIA;
-        this.emitWithState("TriviaIntent");
-		//this.emit(':tell',"You are in "+ room);
-    },
-	"AMAZON.NoIntent": function() {
-        this.emit(":ask", "Would you like to play trivia or would you like a clue to the next spot?","Trivia or Clue?");
-		this.emit("StateIntent");
-		
-    },
-	
-	"StateIntent": function() {
-		var state = this.event.request.intent.slots.gamestate;
-		if(state.value.toLowerCase()=="trivia"){
-			//this.emit(':tell',"trivia selected");
-			// this.emit("TriviaIntent");
-			this.handler.state = GAME_STATES.START;
-			this.emitWithState("StartGame", false);
-		}
-		else if(state.value.toLowerCase()=="clue"){
-			 this.emit("ClueIntent");
-		}
-		else{}
-	},*/
 	"ClueIntent": function() {
 		this.emit(':tell',"clue selected");
 	},
@@ -261,9 +206,7 @@ var clueStateHandlers = Alexa.CreateStateHandler(GAME_STATES.CLUE, {
         this.handler.state = GAME_STATES.START;
         this.emitWithState("StartGame", false);
     },
-    /*"AMAZON.RepeatIntent": function () {
-        this.emit(":ask", this.attributes["speechOutput"], this.attributes["repromptText"]);
-    },*/
+
     "AMAZON.HelpIntent": function () {
         var speechOutput = HELP_MESSAGE;
         var reprompt = HELP_REPROMPT;
@@ -292,13 +235,12 @@ function moreRoomInfo() {
 	
 		if(room=="trophy room"){
 			 factArr = facts.trophyroom;
-			 //this.attributes["room"]="trophy room";
 		}
 		else if(room=="stadium"){
 			factArr = facts.stadium;
 		}
-		else if(room=="art gallery"){
-			factArr = facts.artgallery;
+		else if(room=="players lounge"){
+			factArr = facts.playerslounge;
 		}
 		else if(room=="jersey room"){
 			factArr = facts.jerseyroom;
@@ -310,67 +252,3 @@ function moreRoomInfo() {
 		speechOutput+="Do you want to learn more?";
         this.emit(':askWithCard', speechOutput , "Say yes if you would like to learn more." , SKILL_NAME, randomFact);
 }
-
-
-
-/*var handlers = {
-    'LaunchRequest': function () {
-		this.emit(':ask', WELCOME_MESSAGE,WELCOME_REPROMPT);
-        this.emit('GetNewFactIntent');
-	    },
-		
-    'GetNewFactIntent': function () {
-		
-		
-		var room = this.event.request.intent.slots.roomname;
-		var factArr = undefined;
-		if(room.value.toLowerCase()=="trophy room"){
-			 factArr = facts.trophyroom;
-			 //this.attributes["room"]="trophy room";
-		}
-		else if(room.value.toLowerCase()=="stadium"){
-			factArr = facts.stadium;
-		}
-		else if(room.value.toLowerCase()=="art gallery"){
-			factArr = facts.artgallery;
-		}
-		else if(room.value.toLowerCase()=="jersey room"){
-			factArr = facts.jerseyroom;
-		}
-		else{}
-		
-   
-        var factIndex = Math.floor(Math.random() * factArr.length);
-        var randomFact = factArr[factIndex];
-        //var speechOutput = GET_FACT_MESSAGE + randomFact;
-		var speechOutput="Manchester United is swag....";
-		speechOutput+="Do you want to learn more?";
-		//this.emit(':saveState',true);
-        this.emit(':askWithCard', speechOutput , "Say yes if you would like to learn more." , SKILL_NAME, randomFact);
-		
-		
-    },
-    'AMAZON.HelpIntent': function () {
-        var speechOutput = HELP_MESSAGE;
-        var reprompt = HELP_REPROMPT;
-        this.emit(':ask', speechOutput, reprompt);
-    },
-    'AMAZON.CancelIntent': function () {
-        this.emit(':tell', STOP_MESSAGE);
-    },
-	"AMAZON.YesIntent": function() {
-		//var room= this.attributes["room"];
-        this.emit('GetNewFactIntent');
-		//this.emit(':tell',"You are in "+ room);
-    },
-    "AMAZON.NoIntent": function() {
-        this.emit(":tell", "Ok, hope to see you soon!");
-    },
-    'AMAZON.StopIntent': function () {
-        this.emit(':tell', STOP_MESSAGE);
-    },
-	 "Unhandled": function () {
-        var speechOutput = this.t("Say yes to continue, or no to end the game");
-        this.emit(":ask", speechOutput, speechOutput);
-    }
-};*/
