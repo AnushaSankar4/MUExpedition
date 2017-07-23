@@ -64,7 +64,11 @@ var startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
         this.emit('GetNewFactIntent');
 	}, 
 	"GetNewFactIntent": function () {
+		
 		var room = this.event.request.intent.slots.roomname;
+		if(room.value==undefined){
+			 room.value = "manchester" ;
+		}
 		var factArr = facts.manchester;
 		if(room.value.toLowerCase()=="trophy room"){
 			 factArr = facts.trophyroom;
@@ -83,8 +87,7 @@ var startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
    
         var factIndex = Math.floor(Math.random() * factArr.length);
         var randomFact = factArr[factIndex];
-        //var speechOutput = GET_FACT_MESSAGE + randomFact;
-		var speechOutput="Manchester United is swag....";
+        var speechOutput = GET_FACT_MESSAGE + randomFact;
 		speechOutput+="Do you want to learn more?";
 		Object.assign(this.attributes, {
 			"oldtraffroom": room.value		
@@ -98,6 +101,11 @@ var startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
 	"Unhandled": function () {
         var speechOutput = ROOMNAME_UNHANDLED;
         this.emit(":ask", speechOutput, speechOutput);
+    },
+	'AMAZON.HelpIntent': function () {
+        var speechOutput = HELP_MESSAGE;
+        var reprompt = HELP_REPROMPT;
+        this.emit(':ask', speechOutput, reprompt);
     },
 	"SessionEndedRequest": function () {
         console.log("Session ended in trivia state: " + this.event.request.reason);
@@ -152,6 +160,7 @@ var branchStateHandlers = Alexa.CreateStateHandler(GAME_STATES.BRANCH, {
         var speechOutput = TRIVIA_UNHANDLED;
         this.emit(":ask", speechOutput, speechOutput);
     },
+	
     "SessionEndedRequest": function () {
         console.log("Session ended in trivia state: " + this.event.request.reason);
     }
