@@ -1,0 +1,55 @@
+{
+  "intents": [
+    {
+      "slots": [
+        {
+          "name": "roomname",
+          "type": "ROOM_NAME"
+        }
+      ],
+      "intent": "GetNewFactIntent"
+    },
+    {
+      "intent": "ContinueIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    },
+    {
+      "intent": "AMAZON.StartOverIntent"
+    },
+    {
+      "intent": "StartGame"
+    },
+    {
+      "intent": "TriviaIntent"
+    },
+    {
+      "intent": "ClueIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "gamestate",
+          "type": "GAME_STATE"
+        }
+      ],
+      "intent": "StateIntent"
+    },
+    {
+      "intent": "SessionEndedRequest"
+    },
+    {
+      "intent": "AMAZON.YesIntent"
+    },
+    {
+      "intent": "AMAZON.NoIntent"
+    }
+  ]
+}
