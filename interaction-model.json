@@ -1,0 +1,87 @@
+{
+  "intents": [
+    {
+      "name": "AMAZON.CancelIntent",  
+      "samples": []  
+    },
+    {
+      "name": "AMAZON.HelpIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.StopIntent",
+      "samples": []
+    },
+	{
+      "name": "AMAZON.StartOverIntent",
+      "samples": []
+    },
+	{
+      "name": "GetNewFactIntent",
+      "samples": [
+		 "a fact",
+		 "a Manchester United fact",
+		 "tell me a fact about Manchester United",
+		 "tell me a {roomname} fact",
+		 "give me a fact on {roomname}",
+		 "give me a Manchester United fact",
+		 "give me some information about {roomname}",
+		 "give me some {roomname} information",
+		 "tell me something about {roomname}",
+		 "give me something on {roomname}",
+		 "{roomname}",
+		 "i am in {roomname}",
+		 "give me facts about the {roomname}",
+		 "give me facts about {roomname}",
+		 "give me facts for {roomname}"
+      ],
+      "slots": [
+		{
+		"name": "roomname",
+        "type": "ROOM_NAME"
+			]
+		}
+    }
+	{
+      "name": "StartGame",
+      "samples": []
+    },
+	{
+      "name": "TriviaIntent"",
+      "samples": []
+    },
+	{
+      "name": "ClueIntent",
+      "samples": []
+    },
+	{
+      "name": "StateIntent",
+      "samples": [
+		"{gamestate}",
+		"i would like a {gamestate}",
+		"i would like to play {gamestate}",
+		"play {gamestate}",
+		"give me a {gamestate}"
+	  ],
+	   "slots": [
+        {
+          "name": "gamestate",
+          "type": "GAME_STATE"
+        }
+      ]
+    },
+	{
+      "name": "AMAZON.NoIntent",
+      "samples": []
+    },
+	{
+      "name": "AMAZON.YesIntent",
+      "samples": []
+    },
+	{
+      "name": "SessionEndedRequest",
+      "samples": []
+    },
+    
+  ]
+}
